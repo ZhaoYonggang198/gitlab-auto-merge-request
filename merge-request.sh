@@ -15,6 +15,9 @@ TARGET_BRANCH=`curl --silent "${HOST}${CI_PROJECT_ID}" --header "PRIVATE-TOKEN:$
 
 # The description of our new MR, we want to remove the branch after the MR has
 # been closed
+
+echo ${GITLAB_USER_ID};
+
 BODY="{
     \"id\": ${CI_PROJECT_ID},
     \"source_branch\": \"${CI_COMMIT_REF_NAME}\",
@@ -27,6 +30,8 @@ BODY="{
 # Require a list of all the merge request and take a look if there is already
 # one with the same source branch
 LISTMR=`curl --silent "${HOST}${CI_PROJECT_ID}/merge_requests?state=opened" --header "PRIVATE-TOKEN:${GITLAB_PRIVATE_TOKEN}"`;
+echo ${LISTMR}
+
 COUNTBRANCHES=`echo ${LISTMR} | grep -o "\"source_branch\":\"${CI_COMMIT_REF_NAME}\"" | wc -l`;
 
 # No MR found, let's create a new one
